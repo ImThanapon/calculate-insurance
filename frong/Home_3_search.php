@@ -1,16 +1,3 @@
-<?php
-include('connection_car.php');
-?>
-<?php
-$sql1 = "SELECT * FROM yearcar";
-$query1 = mysqli_query($conn1, $sql1);
-// if ($query2 === false){
-//     die("ERROR: Could not connect. " . mysqli_connect_error());
-// }
-// else 
-// //echo "connect succress";
-// 
-?>
 <!DOCTYPE html>
 <html lang="en">
 

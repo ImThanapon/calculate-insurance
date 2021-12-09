@@ -1,9 +1,9 @@
 <?php
-include('connection_profile.php');
+// include('connection_profile.php');
 ?>
 <?php
-$sql1 = "SELECT * FROM provinces";
-$query1 = mysqli_query($conn1, $sql1);
+// $sql1 = "SELECT * FROM provinces";
+// $query1 = mysqli_query($conn1, $sql1);
 // if ($query1 === false){
 //     die("ERROR: Could not connect. " . mysqli_connect_error());
 // }

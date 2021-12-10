@@ -4,14 +4,12 @@ $(function(){
     var brandObject = $('#brand');
     var modelObject = $('#model');
    
-   
-
     brandObject.on('change', function(){
-        var ModelId = $(this).val();
-
+        var modelId = $(this).val();
+        
         modelObject.html('<option value="">เลือกรุ่นรถ</option>');
         
-        $.get('getModel.php?brand=' + ModelId, function(data){
+        $.get('getModel.php?brand=' + modelId, function(data){
             var result = JSON.parse(data);
             $.each(result, function(index, item){
                 modelObject.append(

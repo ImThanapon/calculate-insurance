@@ -1,8 +1,8 @@
 <?php
     include('connect.php');
     $price = 0;
-    $sql1 = "SELECT * FROM car_brand";
-    $query1 = mysqli_query($conn, $sql1);
+    $sql = "SELECT * FROM car_brand";
+    $query1 = mysqli_query($conn, $sql);
     
 
     if(isset($_POST['submit'])){
@@ -11,7 +11,6 @@
       $b = $_POST['brand'];
 
       if($y == 0 || $m == 0 || $b == 0 ){
-       
         echo "<script>";         
         echo "alert('กรุณากรอกข้อมูลให้ครบถ้วน')";     
         echo "</script>";
@@ -24,14 +23,16 @@
   
         $sqlCallData = "SELECT * FROM car_info WHERE model = '$m' ";
         $resultData = mysqli_query($conn, $sqlCallData);
-  
+
         foreach ($resultData as $value) {
           $min = $value[$strMinYaer];
           $max = $value[$strMaxYaer];
+
           $min = str_replace(',', '', $min);
           $max = str_replace(',', '', $max);    
           $price =  ((int)$min+(int)$max)/2;
         }
+        
       }
 
     }
@@ -72,47 +73,8 @@
         font-family: 'Kanit', sans-serif;
       }
     </style>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
 
-      // function alert_sweet(){
-      //   Swal.fire({
-      //     title: 'รายละเอียด',
-      //     text: 'เงินทุนประกันภัยของคุณคือ XXX,XXX บาท',
-      //     imageUrl: 'https://unsplash.it/400/200',
-      //     imageWidth: 400,
-      //     imageHeight: 200,
-      //     imageAlt: 'Custom image',
-      //   })
-      // }
 
-      // function alert_delay(){
-      //   let timerInterval
-      //     Swal.fire({
-      //       title: 'กำลังคำนวณเงินทุนประกันภัย',
-      //       html: 'กรุณารอสักครู่',
-      //       timer: 1500,
-      //       timerProgressBar: true,
-      //       didOpen: () => {
-      //         Swal.showLoading()
-      //         const b = Swal.getHtmlContainer().querySelector('b')
-      //         timerInterval = setInterval(() => {
-      //           b.textContent = Swal.getTimerLeft()
-      //         }, 100)
-      //       },
-      //       willClose: () => {
-      //         clearInterval(timerInterval),
-      //         alert_sweet();
-      //       }
-      //     }).then((result) => {
-      //       /* Read more about handling dismissals below */
-      //       if (result.dismiss === Swal.DismissReason.timer) {
-      //         console.log('I was closed by the timer')
-      //       }
-      //     })
-          
-      // }
-    </script>
   </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -138,7 +100,7 @@
                       <option value="0" selected>กรุณาเลือกยี่ห้อ</option>
                       <?php while ($result = mysqli_fetch_assoc($query1)) : ?>
                                 <option value="<?= $result["brand_id"] ?>"><?= $result["brand"] ?></option>
-                            <?php endwhile; ?>
+                      <?php endwhile; ?>
                   </select>
               </div>
           </div>
@@ -163,22 +125,22 @@
               <div class="col">
                   <select name="year" id="year" style="width: 200px" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
                       <option value="0" selected>กรุณาเลือกปี</option>
-                      <option value="2021">2021</option>
-                      <option value="2020">2020</option>
-                      <option value="2019">2019</option>
-                      <option value="2018">2018</option>
-                      <option value="2017">2017</option>
-                      <option value="2016">2016</option>
-                      <option value="2015">2015</option>
-                      <option value="2014">2014</option>
-                      <option value="2013">2013</option>
-                      <option value="2012">2012</option>
-                      <option value="2011">2011</option>
-                      <option value="2010">2010</option>
-                      <option value="2009">2009</option>
-                      <option value="2008">2008</option>
-                      <option value="2007">2007</option>
-                      <option value="2006">2006</option>
+                      <option value="2021">พ.ศ.2564 / ค.ศ.2021</option>
+                      <option value="2020">พ.ศ.2563 / ค.ศ.2020</option>
+                      <option value="2019">พ.ศ.2562 / ค.ศ.2019</option>
+                      <option value="2018">พ.ศ.2561 / ค.ศ.2018</option>
+                      <option value="2017">พ.ศ.2560 / ค.ศ.2017</option>
+                      <option value="2016">พ.ศ.2559 / ค.ศ.2016</option>
+                      <option value="2015">พ.ศ.2558 / ค.ศ.2015</option>
+                      <option value="2014">พ.ศ.2557 / ค.ศ.2014</option>
+                      <option value="2013">พ.ศ.2556 / ค.ศ.2013</option>
+                      <option value="2012">พ.ศ.2555 / ค.ศ.2012</option>
+                      <option value="2011">พ.ศ.2554 / ค.ศ.2011</option>
+                      <option value="2010">พ.ศ.2553 / ค.ศ.2010</option>
+                      <option value="2009">พ.ศ.2552 / ค.ศ.2009</option>
+                      <option value="2008">พ.ศ.2551 / ค.ศ.2008</option>
+                      <option value="2007">พ.ศ.2550 / ค.ศ.2007</option>
+                      <option value="2006">พ.ศ.2549 / ค.ศ.2006</option>
                   </select>
               </div>
           </div>

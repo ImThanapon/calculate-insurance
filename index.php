@@ -1,7 +1,45 @@
-<?php 
+<?php
+    include('connect.php');
+    $price = 0;
+    $sql1 = "SELECT * FROM car_brand";
+    $query1 = mysqli_query($conn, $sql1);
+    
 
-  require ('calculate.php');
+    if(isset($_POST['submit'])){
+      $y = $_POST['year'];
+      $m = $_POST['model'];
+      $b = $_POST['brand'];
 
+      if($y == 0 || $m == 0 || $b == 0 ){
+       
+        echo "<script>";         
+        echo "alert('กรุณากรอกข้อมูลให้ครบถ้วน')";     
+        echo "</script>";
+      }else{
+        $nowYear = date("Y");
+        $year = ($nowYear - $y ) +1;
+        $strMinYaer = 'min'.((string)$year);
+        $strMaxYaer = 'max'.((string)$year);
+  
+  
+        $sqlCallData = "SELECT * FROM car_info WHERE model = '$m' ";
+        $resultData = mysqli_query($conn, $sqlCallData);
+  
+        foreach ($resultData as $value) {
+          $min = $value[$strMinYaer];
+          $max = $value[$strMaxYaer];
+          $min = str_replace(',', '', $min);
+          $max = str_replace(',', '', $max);    
+          $price =  ((int)$min+(int)$max)/2;
+        }
+      }
+
+    }
+    if($price != 0){
+      echo "เงินทุนประกันของคุณคือ ";
+      echo "<h2><span class='badge badge-danger'>", number_format($price), "</span></h2>" ;
+    }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +62,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500&display=swap" rel="stylesheet">
 
+    <script src="assets/jquery.min.js"></script>
+    <script src="assets/script-car.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+
     <style>
       body{
         font-family: 'Kanit', sans-serif;
@@ -32,43 +75,43 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
-      function alert_sweet(){
-        Swal.fire({
-          title: 'รายละเอียด',
-          text: 'เงินทุนประกันภัยของคุณคือ XXX,XXX บาท',
-          imageUrl: 'https://unsplash.it/400/200',
-          imageWidth: 400,
-          imageHeight: 200,
-          imageAlt: 'Custom image',
-        })
-      }
+      // function alert_sweet(){
+      //   Swal.fire({
+      //     title: 'รายละเอียด',
+      //     text: 'เงินทุนประกันภัยของคุณคือ XXX,XXX บาท',
+      //     imageUrl: 'https://unsplash.it/400/200',
+      //     imageWidth: 400,
+      //     imageHeight: 200,
+      //     imageAlt: 'Custom image',
+      //   })
+      // }
 
-      function alert_delay(){
-        let timerInterval
-          Swal.fire({
-            title: 'กำลังคำนวณเงินทุนประกันภัย',
-            html: 'กรุณารอสักครู่',
-            timer: 1500,
-            timerProgressBar: true,
-            didOpen: () => {
-              Swal.showLoading()
-              const b = Swal.getHtmlContainer().querySelector('b')
-              timerInterval = setInterval(() => {
-                b.textContent = Swal.getTimerLeft()
-              }, 100)
-            },
-            willClose: () => {
-              clearInterval(timerInterval),
-              alert_sweet();
-            }
-          }).then((result) => {
-            /* Read more about handling dismissals below */
-            if (result.dismiss === Swal.DismissReason.timer) {
-              console.log('I was closed by the timer')
-            }
-          })
+      // function alert_delay(){
+      //   let timerInterval
+      //     Swal.fire({
+      //       title: 'กำลังคำนวณเงินทุนประกันภัย',
+      //       html: 'กรุณารอสักครู่',
+      //       timer: 1500,
+      //       timerProgressBar: true,
+      //       didOpen: () => {
+      //         Swal.showLoading()
+      //         const b = Swal.getHtmlContainer().querySelector('b')
+      //         timerInterval = setInterval(() => {
+      //           b.textContent = Swal.getTimerLeft()
+      //         }, 100)
+      //       },
+      //       willClose: () => {
+      //         clearInterval(timerInterval),
+      //         alert_sweet();
+      //       }
+      //     }).then((result) => {
+      //       /* Read more about handling dismissals below */
+      //       if (result.dismiss === Swal.DismissReason.timer) {
+      //         console.log('I was closed by the timer')
+      //       }
+      //     })
           
-      }
+      // }
     </script>
   </head>
 <body class="hold-transition login-page">
@@ -80,7 +123,9 @@
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">คำนวณเงินทุนประกันภัยรถยนต์</p>
+      <?php
       
+      ?>
     
       <form action="" method="post">
         <div class="text-center">
@@ -89,11 +134,11 @@
                   <h5>ยี่ห้อรถยนต์</h5>
               </div>
               <div class="col">
-                  <select style="width: 200px" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                      <option selected>กรุณาเลือกยี่ห้อ</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                  <select name="brand" id="brand" style="width: 200px" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                      <option value="0" selected>กรุณาเลือกยี่ห้อ</option>
+                      <?php while ($result = mysqli_fetch_assoc($query1)) : ?>
+                                <option value="<?= $result["brand_id"] ?>"><?= $result["brand"] ?></option>
+                            <?php endwhile; ?>
                   </select>
               </div>
           </div>
@@ -104,12 +149,10 @@
                   <h5>รุ่นรถยนต์</h5>
               </div>
               <div class="col">
-                  <select style="width: 200px" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                      <option selected>กรุณาเลือกรุ่น</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                  <select name="model" id="model" style="width: 200px" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                  <option value="0" >เลือกรุ่นที่ต้องการ</option>
                   </select>
+          
               </div>
           </div>
 
@@ -118,33 +161,39 @@
                   <h5>ปีรถยนต์</h5>
               </div>
               <div class="col">
-                  <select style="width: 200px" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                      <option selected>กรุณาเลือกปี</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                  <select name="year" id="year" style="width: 200px" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                      <option value="0" selected>กรุณาเลือกปี</option>
+                      <option value="2021">2021</option>
+                      <option value="2020">2020</option>
+                      <option value="2019">2019</option>
+                      <option value="2018">2018</option>
+                      <option value="2017">2017</option>
+                      <option value="2016">2016</option>
+                      <option value="2015">2015</option>
+                      <option value="2014">2014</option>
+                      <option value="2013">2013</option>
+                      <option value="2012">2012</option>
+                      <option value="2011">2011</option>
+                      <option value="2010">2010</option>
+                      <option value="2009">2009</option>
+                      <option value="2008">2008</option>
+                      <option value="2007">2007</option>
+                      <option value="2006">2006</option>
                   </select>
               </div>
           </div>
 
       </div>
-        <!-- <button onclick="alert()"  type="submit" class="btn btn-block btn-primary mt-3">
-          คำนวณเงินทุนประกันภัย <i class="fas fa-calculator"></i>
-        </button> -->
+      <div class="text-center">
+         <button type="submit" name="submit" class="btn btn-primary mt-3">
+            คำนวณ <i class="fas fa-calculator"></i>
+        </button>
+      </div>
       </form>
-      <button onclick="alert_delay()"  type="submit" class="btn btn-block btn-primary mt-3">
-          คำนวณเงินทุนประกันภัย <i class="fas fa-calculator"></i>
-      </button>
+      
 
       
-      <div class="social-auth-links text-center mb-1">
-        <p>- OR -</p>
-        
-        <a class="btn btn-block btn-danger">
-        <i class="fas fa-trash-alt"></i> ล้างข้อมูล
-        </a>
-      </div>
-      <!-- /.social-auth-links -->
+
 
     </div>
     <!-- /.login-card-body -->

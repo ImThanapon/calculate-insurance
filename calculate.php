@@ -3,6 +3,9 @@
 
     $param = array(
         ':id'=> 1
+        //
+        //
+        //
     );
     $stmt = $conn->prepare('SELECT *
     FROM car_detail
